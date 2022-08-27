@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="./boardlib.js"></script>
+    <style>
+        #main1 {
+            background: url("../images/back1.jpg");
+            background-size: cover;
+            /* background-position: left;   */
+            width: 100vw;
+            height: 100vh;
+        }
+        #fantasyTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #fantasyTable th {
+            background: #D6D6D6;
+            font-size: .75rem;
+            font-weight: 400;
+            color: #474443;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        #fantasyTable td {
+            padding: 4px 8px;
+            font-size: .75rem;
+            font-weight: 400;
+            color: #474443;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        #fantasyTable tr {}
+
+        /*controls odd rows*/
+        #fantasyTable tr:nth-child(odd) {
+            background: #FFFFFF;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        /*controls even rows*/
+        #fantasyTable tr:nth-child(even) {
+            background: #FFFFFF;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        /*controls column 1*/
+        #fantasyTable td:nth-child(1) {
+            background: #FFFFFF;
+            color: #0082D6;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            border-left: solid 1px #FFFFFF;
+        }
+
+        /*controls column 1 header*/
+        #fantasyTable th:nth-child(1) {
+            text-align: center;
+            border-left: solid 1px #FFFFFF;
+        }
+
+        /*controls column 2*/
+        #fantasyTable td:nth-child(2) {
+            text-transform: uppercase;
+        }
+
+        /*controls column 5*/
+        #fantasyTable td:nth-child(5) {
+            background: #EDEDED;
+            text-align: center;
+            color: #0082D6;
+            font-weight: 700;
+        }
+
+        /*controls column head 5*/
+        #fantasyTable th:nth-child(5) {
+            background: #D6D6D6;
+            text-align: center;
+        }
+
+        /*controls column 6*/
+        #fantasyTable td:nth-child(6) {
+            background: #EDEDED;
+            color: #0082D6;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        /*controls column head 6*/
+        #fantasyTable th:nth-child(6) {
+            background: #D6D6D6;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main1">
+        <h1>뽈뿜없는 게시판 읽기</h1>
+        <form id="id_rform" action="update_action.html" method="get">
+            <!--굳이 사용자에게 보여 줄 필요는 없는 데 프로그램적으로 필요한 
+        값을 폼 안에 숨겨서 보낼 때 사용, 그저 안 보이는 텍스트박스 -->
+            <input type="hidden" name="nm_gnum" value="">
+            <table id="fantasyTable" border="1 solid yellow">
+                <tr>
+                    <td>글제목</td>
+                    <td><input type="text" name="nm_title" value=""></td>
+                </tr>
+                <tr>
+                    <td>글쓴이</td>
+                    <!-- readOnly vs disabled  readOnly는 서버에 전송가능, disabled는 안됨-->
+                    <td><input type="text" name="nm_writer" value="" disabled></td>
+                </tr>
+                <tr>
+                    <td>글쓴이 레벨</td>
+                    <td>
+                        <select name="nm_level">
+                            <option value="diamond">다이아</option>
+                            <option value="platinum">플레티넘</option>
+                            <option value="gold">골드</option>
+                            <option value="silver" selected>실버</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>카테고리</td>
+                    <td>
+                        회원정보<input type="checkbox" name="nm_cat" value="회원정보">
+                        결제<input type="checkbox" name="nm_cat" value="결제">
+                        문의<input type="checkbox" name="nm_cat" value="문의">
+                        기타<input type="checkbox" name="nm_cat" value="기타">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        내용<br>
+                        <textarea name="nm_content" rows="10" cols="50" required></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="수정">
+                        <input type="button" value="삭제" id="id_del">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <script>
+        var v_form = document.querySelector("#id_rform");
+        var v_delBtn = document.querySelector("#id_del");
+        function f_del() {
+            v_form.action = "delete_action.html";
+            v_form.submit(); // 전송!
+        }
+        v_delBtn.addEventListener("click", f_del);
+
+
+        var v_titleText = v_form.nm_title;
+        var v_writerText = v_form.nm_writer;
+        var v_contentText = v_form.nm_content;
+        var v_levelSelect = v_form.nm_level; // 이거슨 select
+
+        //주소표시줄에서 글넘버 잡아오깅
+        var v_gnum = request.getParameter("gnum");
+        function checkbox(checked) {
+            var result = document.querySelectorAll('input[type=checkbox][name=nm_cat]:checked');
+
+        }
+
+
+        // 번호에 해당하는 글을 localstorage에서 찾아야 함
+        var v_dataArr = JSON.parse(localStorage.getItem(v_tblName));
+        var v_schGul;  // 찾은 글을 연결 시킬 변수 
+        for (var i = 0; i < v_dataArr.length; i++) {
+            if (v_dataArr[i].pid == v_gnum) {  // 일치하는 글을 찾았다면
+                v_schGul = v_dataArr[i];
+                break;                       // 더 찾을 필요없음
+            }
+        }
+        // 찾았으니 해당 값을 화면에 표시
+        v_titleText.value = v_schGul.title;
+        v_writerText.value = v_schGul.writer;
+        v_contentText.value = v_schGul.content;
+        v_levelSelect.value = v_schGul.level;
+        // 체크박스 체크하기 , v_schGul.cats
+
+        // 연봉 올리는 코딩!
+        var v_ckVals = v_schGul.cats;
+        for (var i = 0; i < v_ckVals.length; i++) {
+            document.querySelector("input[value=" + v_ckVals[i] + "]").checked = true;
+        }
+
+        v_form.nm_gnum.value = v_gnum;
+
+    // select의 value의 값을 주면, option의 같은 value값이 자동으로 선택됨 
+
+
+    </script>
+</body>
+
+</html>

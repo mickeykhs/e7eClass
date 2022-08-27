@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+<script src="./gesilib.js"></script>
+<style>
+    .active { /* 현재 페이지를 표시하기 위한 억지 스타일 */
+        font-size: 3em; /* 다섯배 */
+        color: red;
+    }
+</style>
+</head>
+<body>
+<h1>뽈품없는 게시판 리스통</h1>
+<div id="id_disp"></div> <!--리스트 출력할 영역 지정-->
+<script>
+    var v_disp = document.querySelector("#id_disp");
+    var v_dataArr = JSON.parse(localStorage.getItem(v_tblName));
+
+    /*  
+        페이지를 나누려면 이런것들이 필요함
+        페이지당 글 개수?
+        페이지번호 ? 
+        전체 글 개수 ?   
+    */
+    var v_pDsu = 10;    // 페이지당 글 개수(10개가 나오게 하려고)
+    var v_pNum = request.getParameter("pNum");
+    // alert(v_pNum);
+    if(!v_pNum){
+        v_pNum = 1; // 페이지 넘버가 넘어 온 적이 없다면 기본 1페이지
+    }
+
+    var v_totalG = v_dataArr.length;  // 전체 글 개수
+    var v_pGaesu = Math.ceil(v_totalG / v_pDsu); // 나머지가 있으면 1페이지 더
+    // 페이지별 글 시작넘버, 끝넘버가 필요
+    // 1페이지는 0~9 인덱스, 2페이지는 10~19 인덱스...
+    var v_sNum = (v_pNum -1) * v_pDsu;
+    var v_eNum = v_sNum + (v_pDsu - 1);
+
+    // 마지막 페이지는 글 갯수가 모자랄 수 있음, 포인트
+    if(v_eNum > (v_totalG -1)){
+        v_eNum = v_totalG -1; // 강제로 마지막 index 값으로 세팅
+    }
+
+    var v_tblStr = "<table border=2 width=600>";
+    v_tblStr += "<tr><th>순번</th><th>제목</th><th>글쓰니</th>";
+    v_tblStr += "<th>카테고링</th><th>레베르</th><th>삭제</th></tr>";    
+    for(var i=v_sNum; i<=v_eNum; i++){
+        var v_ggul = v_dataArr[i];
+        console.log("i=",i," v_ggul=",v_ggul); // 눈으로 항상 확인
+        v_tblStr += "<tr onmouseover='f_over(this)' onmouseout='f_out(this)' >";
+        v_tblStr += "<td>" + (i+1) + "</td>";    
+        v_tblStr += "<td><a href=read.html?gnum=" + v_ggul.pid + " >" + v_ggul.title + "</a></td>";    
+        v_tblStr += "<td>" + v_ggul.writer + "</td>";    
+        v_tblStr += "<td>" + v_ggul.cats + "</td>";    
+        v_tblStr += "<td>" + v_ggul.level + "</td>";
+        v_tblStr += "<td><input type=checkbox name=nm_del value="+ v_ggul.pid +"></td>";
+        v_tblStr += "</tr>"; 
+    }
+    v_tblStr += "</table><br><br>";
+
+    // 페이지 넘버 화면에 출력해 보기
+    // 뜬금없는 문제 11페이지 안 나오는 이유를 찾으시오
+    // 11페이지 글은 10개가 안됨
+    for(var i=1; i<=v_pGaesu; i++){
+        if(i == v_pNum) {
+            v_tblStr += "<a class=active href='list.html?pNum=" + i + "' >" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;";   // &nbsp 공백 까먹지 말자!!
+        } else {
+            v_tblStr += "<a href='list.html?pNum=" + i + "' >" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;";   // &nbsp 공백 까먹지 말자!!
+        }
+    }
+    v_tblStr += "<hr><a href=write.html>쌔에끌쓰깅</a><br>";
+    // 버튼에 기능 구현을 해봅니다. (여러개 삭제)
+    // 배열에서 삭제는 splice(인덱스,갯수)메소드를 사용합니다
+    v_tblStr += "<input id=id_del type=button value='선택된 것만 삭제하기'>";
+    v_disp.innerHTML = v_tblStr;
+    // 순서 (Sequence)에 의해 프로그램이 굉장히 영향을 많이 받는다!!
+
+    var v_delBtn = document.querySelector("#id_del");
+    var v_delBoxs = document.querySelectorAll("input[name=nm_del]");
+
+    function f_del(){
+        // 체크된 체크박스의 value값 가져오기
+        var v_checkedVals = []; // 빈 배열
+        for(var i=0; i< v_delBoxs.length; i++){
+            if(v_delBoxs[i].checked){
+                v_checkedVals.push(v_delBoxs[i].value);
+            }
+        }
+        // alert(v_checkedVals); // 결과 눈으로 확인!
+        // 해당하는 값 배열에서 지우기
+        for(var i=0; i<v_checkedVals.length; i++){
+            for(var j=0; j<v_dataArr.length; j++){
+                if(v_dataArr[j].pid == v_checkedVals[i]){
+                    v_dataArr.splice(j,1); // 1개 지우기
+                    break;
+                }
+            }
+        }
+        console.log(v_dataArr); // 눈으로 확인
+        // v_dataArr는 메모리상의 변수라서, 실제 localStorage에서는
+        // 안지워져 있으므로, localStorage에 덮어쓰기로 저장
+        localStorage.setItem(v_tblName, JSON.stringify(v_dataArr));
+
+        // 화면이 안 고쳐져 있어서, 화면을 새로 불러와야 함(아님 새로 만들던가)
+        location.replace("list.html?pNum=" + v_pNum); // 다시 불러오기
+
+    }
+    v_delBtn.addEventListener("click",f_del);
+      
+    // if(document.getElementById(id_del).chceked){
+    //     v_ggul.splice
+    // }
+    function f_over(p_this){
+        p_this.style.backgroundColor ="black";
+        p_this.style.color = "pink";
+    }
+
+    function f_out(p_this){
+        p_this.style.backgroundColor ="pink";
+        p_this.style.color = "black";
+    }
+
+    //여기서 뜬끔없는 잠깨는 문제? 제한시간 60초
+    //마우스 올라간 TR만 배경색이 블랙 글자색이 핑크로 되도록 하시옹, 얼렁
+    //mouseover, mouseout 힌토를 넘 마니 줌, 힌토 주지 마삼
+    var v_trs = document.querySelectorAll("tr");
+
+    //tr 1개 이벤트 등록 함수
+    function f_overOut(p_tr){
+        p_tr.addEventListener("mouseover",function(){
+            p_tr.style.backgroundColor ="black";
+            p_tr.style.color = "pink";
+        });        
+        p_tr.addEventListener("mouseout",function(){
+            p_tr.style.backgroundColor ="white";
+            p_tr.style.color = "black";
+        });        
+    }
+
+//    for(var k=0; k<v_trs.length; k++){
+//        f_overOut(v_trs[k]);
+/*         v_trs[k].addEventListener("mouseover",function(){
+            v_trs[k].style.backgroundColor ="black";
+            v_trs[k].style.color = "pink";
+        });
+        v_trs[k].addEventListener("mouseout",function(){
+            v_trs[k].style.backgroundColor ="white";
+            v_trs[k].style.color = "black";
+        });
+ */    
+//}
+</script>    
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판...</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<style>
+    body {
+        width: 100%;
+        margin: 0;
+        
+    }
+    #main1 {
+            background: url("../images/back1.jpg");
+            background-size: cover;
+            /* background-position: left;   */
+            width: 100vw;
+            height: 100vh;
+        }
+        #fantasyTable {
+            width: 40%;
+            border-collapse: collapse;
+        }
+
+        #fantasyTable th {
+            background: #D6D6D6;
+            font-size: .75rem;
+            font-weight: 400;
+            color: #474443;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        #fantasyTable td {
+            padding: 4px 8px;
+            font-size: .75rem;
+            font-weight: 400;
+            color: #474443;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        #fantasyTable tr {}
+
+        /*controls odd rows*/
+        #fantasyTable tr:nth-child(odd) {
+            background: #FFFFFF;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        /*controls even rows*/
+        #fantasyTable tr:nth-child(even) {
+            background: #FFFFFF;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        /*controls column 1*/
+        #fantasyTable td:nth-child(1) {
+            background: #FFFFFF;
+            color: #0082D6;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            border-left: solid 1px #FFFFFF;
+        }
+
+        /*controls column 1 header*/
+        #fantasyTable th:nth-child(1) {
+            text-align: center;
+            border-left: solid 1px #FFFFFF;
+        }
+
+        /*controls column 2*/
+        #fantasyTable td:nth-child(2) {
+            text-transform: uppercase;
+        }
+
+        /*controls column 5*/
+        #fantasyTable td:nth-child(5) {
+            background: #EDEDED;
+            text-align: center;
+            color: #0082D6;
+            font-weight: 700;
+        }
+
+        /*controls column head 5*/
+        #fantasyTable th:nth-child(5) {
+            background: #D6D6D6;
+            text-align: center;
+        }
+
+        /*controls column 6*/
+        #fantasyTable td:nth-child(6) {
+            background: #EDEDED;
+            color: #0082D6;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        /*controls column head 6*/
+        #fantasyTable th:nth-child(6) {
+            background: #D6D6D6;
+            text-align: center;
+        }
+        .tb1 {
+            display: flex;
+            justify-content: center;
+        }
+</style>
+
+<body>
+    <!-- CRUD Create Read Update Delete -->
+    <div id="main1">
+        <h1 style="text-align: center; color:yellow">글쓰기</h1>
+        <hr>
+        <form id="id_wform" class="tb1" action="write_action.html" method="get">
+            <table id="fantasyTable" border="1">
+                <tr>
+                    <td>글제목</td>
+                    <td><input type="text" name="nm_title" value="" required></td>
+                </tr>
+                <tr>
+                    <td>글쓴이</td>
+                    <td><input type="text" name="nm_writer" value="" required></td>
+                </tr>
+                <tr>
+                    <td>글쓴이 레벨</td>
+                    <td>
+                        <select name="nm_level">
+                            <option value="diamond">다이아</option>
+                            <option value="platinum">플레티넘</option>
+                            <option value="gold">골드</option>
+                            <option value="silver" selected>실버</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>카테고리</td>
+                    <td>
+                        회원정보<input type="checkbox" name="nm_cat" value="information">
+                        결제<input type="checkbox" name="nm_cat" value="charge">
+                        문의<input type="checkbox" name="nm_cat" value="question">
+                        기타<input type="checkbox" name="nm_cat" value="etc">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        내용<br>
+                        <textarea name="nm_content" rows="30" cols="100" required></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="글 올리기">
+                        <input type="reset" value="다시쓰기" onclick="reset1()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <script>
+        var v_form = document.querySelector("#id_wform");
+        var v_ckBoxs = document.querySelectorAll("input[name=nm_cat]");
+
+        function reset1(){
+            swal("reset","글을 초기화합니다", "warning");
+        }
+        
+        v_form.onsubmit = function () {
+            event.preventDefault(); // 일단 전송 막깅
+            var v_cnt = 0;
+            for (var i = 0; i < v_ckBoxs.length; i++) { // 체크박스 체크 확인
+                if (v_ckBoxs[i].checked) {
+                    v_cnt++;
+                }
+            }
+            if (v_cnt == 0) {
+                swal("경고","카테고리를 선택해주세요","warning");
+                v_ckBoxs[0].focus();
+                return; // 종료
+            }
+            v_form.submit();  // 떤송
+            
+            swal("성공","글이 잘 등록되었습니다", "success");
+        }
+    </script>
+</body>
+
+</html>

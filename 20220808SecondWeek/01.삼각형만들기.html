@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #id_disp{
+            width: 100%;
+            height: 80vh;
+            border: 1px solid black;
+        }
+        .nemo{
+            display: inline-block; /* 옆에 누가 와도 됨 기본값 block은 혼자 한줄 */
+            text-align: center; /* 가운데 정렬 */
+            font-size: 1.2em;  /* 글자사이즈 1.2배 */
+            line-height: 25px; /* 글자 높이 */
+            width: 20px;
+            height: 20px;
+            border: 1px solid blue;
+        }
+    </style>
+</head>
+<body>
+<input type="button" value="Star" onclick="f_sample()">
+<input type="button" value="reverseStar" onclick="f_sample2()">
+<input type="button" value="triangleStar" onclick="f_sample3()">
+<div id="id_disp"></div>
+<script>
+    // factory 패턴(공장식으로 찍어내기)
+    // 디자인 패턴 외우는 것이 아니고, 머리속에 잔상으로 참고만
+    // 외우지말자 , 창의성이 사라짐 GOF -> Gang Of Four
+    var v_arr16Colors = [];  // 16진수 색깔에 사용되는 문자 저장 배열
+    for(var i=0; i<10; i++){
+        v_arr16Colors.push(i+'');
+    }
+    v_arr16Colors.push('a');
+    v_arr16Colors.push('b');
+    v_arr16Colors.push('c');
+    v_arr16Colors.push('d');
+    v_arr16Colors.push('e');
+    v_arr16Colors.push('f');
+
+    function f_hexaRanDomColor(){
+        var v_16color = "#";
+        for(var i=1; i<=6; i++){
+            var v_ranNum = Math.floor(Math.random()*v_arr16Colors.length)
+            v_16color += v_arr16Colors[v_ranNum];
+        }
+        console.log(v_16color); // 눈으로 자주 보는 습관이 디버깅능력향상
+        return v_16color;
+    }
+
+    var v_dayoung="(｡♥‿♥｡)♫꒰･‿･๑꒱ʕ•͡-•ʔΦωΦ)";
+    v_dayoung = v_dayoung.split(""); //글자 1개씩 쪼개서 배열 리턴
+
+    var v_disp = document.querySelector("#id_disp");
+    function f_nemo(p_char){
+        var v_nemo = document.createElement("div"); //div 생성
+        v_nemo.setAttribute("class","nemo");
+        if(!p_char){  // 빈 공백이 왔을 때 테두리가 하얀색(안보이는) 네모 리턴
+            v_nemo.style.border="1px solid white";
+        }else {
+            v_nemo.style.color = f_hexaRanDomColor();
+            v_nemo.style.backgroundColor = f_hexaRanDomColor();
+            var v_ran = Math.floor(Math.random()*v_dayoung.length);
+            v_nemo.innerHTML = v_dayoung[v_ran]; // 랜덤 글자
+        }
+        // v_nemo.innerHTML=p_char;
+        return v_nemo;
+    }
+
+    // v_disp.appendChild(f_nemo("*"));  // *들어간 네모
+    // v_disp.appendChild(f_nemo(""));   // 눈에 안보이는 네모 (테두리 하얀색)
+    function f_sample(){
+        v_disp.innerHTML=""; // 기존 꺼 클리엉
+        for(var i=1; i<=9; i++){
+            for(var j=1; j<=i; j++){
+                v_disp.appendChild(f_nemo("*"));
+            }
+            v_disp.innerHTML += "<br>"; // 줄바꿈 처리
+        }
+    }
+
+
+    function f_sample2(){
+        v_disp.innerHTML=""; // 일단 클리엉
+        for(var i=1; i<=9; i++){
+            for(var j=9; j>0; j--){
+                if(j>i){
+                    v_disp.appendChild(f_nemo(""));
+                } else{
+                    v_disp.appendChild(f_nemo("*"));
+                }
+            } 
+            v_disp.innerHTML += "<br>";
+        }
+    }
+
+    function f_sample3(){
+        v_disp.innerHTML="";
+        for(var i=1; i<=9; i++){
+            for(var j=9; j>i; j--){
+                v_disp.appendChild(f_nemo(""));
+            }
+            for(var k=1; k<=i*2-1; k++){
+                v_disp.appendChild(f_nemo("*"));
+            } 
+            v_disp.innerHTML += "<br>";
+        }
+        // setTimeout(f_sample3,500);
+    }
+</script>
+    
+</body>
+</html>

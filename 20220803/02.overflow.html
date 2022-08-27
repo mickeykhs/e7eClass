@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #id_parent{
+            position:relative;
+            left: 250px;
+            top: 200px;
+            width: 200px;
+            height: 200px;
+            background-color: aqua;
+            border: 50px groove blue;
+            overflow: hidden;  /* 넘치는 걸 잘라라 */
+        }
+        .child {
+            position: absolute;
+            width: 820px;
+            height: 200px;
+            border: 5px solid blue;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" value="stop" id="id_stop">
+    <h1>제 특기는 여러분을 헷갈리게 하는 것</h1>
+    <div id="id_parent">
+        <div id="id_child1" class="child">
+            <img src="../images/아따아따.jpg">
+            <img src="../images/아따아따2.jpg">
+            <img src="../images/아따아따3.jpg">
+            <img src="../images/강아지1.jpg">
+        </div>
+        <div id="id_child2" class="child">
+            <img src="../images/설인아.jpg">
+            <img src="../images/설인아2.jpg">
+            <img src="../images/설인아3.jpg">
+            <img src="../images/우영우.jpg">
+        </div>
+    </div>
+    <script>
+        var v_stop = document.querySelector("#id_stop");
+        var v_child1 = document.querySelector("#id_child1");
+        var v_child2 = document.querySelector("#id_child2");
+
+        var v_mvWidth = 10;
+        function f_move(){
+            v_child1.style.left = parseInt(v_child1.style.left) - v_mvWidth + "px";
+            v_child2.style.left = parseInt(v_child2.style.left) - v_mvWidth + "px";
+            
+            if(parseInt(v_child2.style.left) == 0) v_child1.style.left = "820px";
+            if(parseInt(v_child1.style.left) == 0) v_child2.style.left = "820px";
+
+            setTimeout(f_move, 30);
+            
+        }
+        v_stop.addEventListener("click",function(){
+        });
+        v_stop.addEventListener("click",function(){
+            clearTimeout(v_timerID); 
+            isStart = false;  
+        });
+        v_timerID = setTimeout(f_move,50);
+        // 페이지 로딩이 끝나면 자동으로 발생하는 이벤트
+        window.onload = function(){
+            if(!v_child1.style.left){
+                v_child1.style.left = "0px";
+                v_child2.style.left = "420px";
+            }
+            f_move();
+        }
+        var v_timerID; 
+    </script>
+</body>
+</html>

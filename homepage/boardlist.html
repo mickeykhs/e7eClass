@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous" />
+    <script src="./boardlib.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    
+    <style>
+        body {
+            /* max-width: 960px; */
+            max-width: 100%;
+            margin: 0 auto
+        }
+
+        .border-right {
+            border-right: thin solid #F5F5F5
+        }
+
+        .m-b-20 {
+            margin: 0 0 20px 0;
+        }
+
+        .m-b-30 {
+            margin: 0 0 30px 0;
+        }
+
+        .m-b-60 {
+            margin: 0 0 30px 0;
+        }
+
+        .category-row ul {
+            list-style: none;
+        }
+
+        .category-row li a {
+            font-style: normal;
+        }
+
+        .category-row ul li {
+            margin-left: 0;
+        }
+
+        .category-row a>img {
+            margin: 0 0 30px 0;
+        }
+
+        .category-row a>img:hover {
+            opacity: 0.54;
+            filter: alpha(opacity=54);
+            /* For IE8 and earlier */
+        }
+
+        .category-link-sm {
+            color: #2196F3;
+            font-size: 12px;
+        }
+
+        .category-link {
+            color: #2196F3;
+        }
+
+        .ga-arrow-right {
+            position: relative;
+            top: .3em;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, .75), rgba(0, 0, 0, .5)), url('http://s7d2.scene7.com/is/image/Watscocom/baker_landing_20161212_rheem-destination-unknown-04?scl=1&qlt=90,1&resMode=sharp2&op_usm=1.75,0.3,2,0') no-repeat;
+            background-size: cover;
+            background-color: #000000;
+            text-shadow: 1px 2px 3px #000000;
+            position: relative;
+            padding: 30px 30px 0 30px;
+        }
+
+        .hero p>img {
+            display: inline;
+            padding: 10px
+        }
+
+        .inverse {
+            color: white
+        }
+
+        .inverse a {
+            color: white
+        }
+
+        #fantasyTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #fantasyTable th {
+            background: #D6D6D6;
+            font-size: .75rem;
+            font-weight: 400;
+            color: #474443;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        #fantasyTable td {
+            padding: 4px 8px;
+            font-size: .75rem;
+            font-weight: 400;
+            color: #474443;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        #fantasyTable tr {}
+
+        /*controls odd rows*/
+        #fantasyTable tr:nth-child(odd) {
+            background: #FFFFFF;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        /*controls even rows*/
+        #fantasyTable tr:nth-child(even) {
+            background: #FFFFFF;
+            border-bottom: solid thin #C1C1C1;
+            border-right: solid thin #C1C1C1;
+            border-top: solid thin #D6D6D6;
+            border-left: solid thin #D6D6D6;
+        }
+
+        /*controls column 1*/
+        #fantasyTable td:nth-child(1) {
+            background: #FFFFFF;
+            color: #0082D6;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            border-left: solid 1px #FFFFFF;
+        }
+
+        /*controls column 1 header*/
+        #fantasyTable th:nth-child(1) {
+            text-align: center;
+            border-left: solid 1px #FFFFFF;
+        }
+
+        /*controls column 2*/
+        #fantasyTable td:nth-child(2) {
+            text-transform: uppercase;
+        }
+
+        /*controls column 5*/
+        #fantasyTable td:nth-child(5) {
+            background: #EDEDED;
+            text-align: center;
+            color: #0082D6;
+            font-weight: 700;
+        }
+
+        /*controls column head 5*/
+        #fantasyTable th:nth-child(5) {
+            background: #D6D6D6;
+            text-align: center;
+        }
+
+        /*controls column 6*/
+        #fantasyTable td:nth-child(6) {
+            background: #EDEDED;
+            color: #0082D6;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        /*controls column head 6*/
+        #fantasyTable th:nth-child(6) {
+            background: #D6D6D6;
+            text-align: center;
+        }
+
+        .pointsTable {}
+
+        .pointLeader img {
+            float: left;
+            padding-right: 20px;
+            font-weight: 900;
+        }
+
+        .pointLeader p {
+            font-size: .75rem;
+            text-align: left
+        }
+
+        .pointLeader h4 {
+            font-weight: 900;
+            text-align: left
+        }
+
+        .align-center {
+            text-align: center
+        }
+
+        .learnMore {
+            padding: 0 0 0 10px
+        }
+
+        .md-label {
+            background: #BABABA
+        }
+
+        .md-label-orange {
+            background: #f78d2c;
+            padding: 0.3rem 0.5rem;
+            border-radius: 0;
+            color: white
+        }
+
+        .md-caps {
+            text-transform: uppercase
+        }
+
+        .card {
+            border: solid thin #F5F5F5;
+            padding: 2rem 1rem;
+        }
+
+        .callout {
+            border: solid thin #F5F5F5;
+            background-color: #D6D6D6;
+            border-radius: 5px;
+            padding: .5rem;
+            width: auto;
+        }
+
+        .md-black {
+            font-weight: 900;
+        }
+
+        .linethrough {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .linethrough:before {
+            border-top: 2px solid #dfdfdf;
+            content: "";
+            margin: 0 auto;
+            /* this centers the line to the full width specified */
+            position: absolute;
+            /* positioning must be absolute here, and relative positioning must be applied to the parent */
+            top: 15px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 95%;
+            z-index: -1;
+        }
+
+        .linethrough span {
+            /* to hide the lines from behind the text, you have to set the background color the same as the container */
+            background: #FFFFFF;
+            padding: 0 15px;
+        }
+
+        .max-width-50 {
+            max-width: 50%
+        }
+
+        /*controls responsive button for opening hidden columns*/
+        table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before,
+        table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
+            background-color: #0d82fb;
+            border: none;
+            font-size: 12px
+        }
+
+        /* give space between search bar and table */
+        .dataTables_filter {
+            margin-bottom: 20px
+        }
+
+        @media screen and (max-width: 39.9375em) {
+
+            /* give space between search bar and table */
+            .dataTables_filter {
+                display: none !important
+            }
+        }
+
+
+        .active {
+            font-size: 1.5rem;
+            color: yellow;
+            width: 100px;
+            height: 100px;
+            text-decoration: none;
+            transition: 1s;
+        }
+        .active:hover {
+            font-size: 2rem;
+            transform: scale(2);
+            transform-origin: 30% 70%;
+            border: 1px solid black;
+            background: #D6D6D6;
+            color: red;
+        }
+
+        .pagi {
+            text-align: center;
+            display: block;
+            list-style-type: disc;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            padding-inline-start: 40px;
+        }
+        .ano {
+            text-decoration: none;
+            color: yellow;
+            border-radius: 20px;
+            border: 2px solid #C1C1C1;
+            box-shadow: 3px 3px 3px 3px gray;
+        }
+        .ano:hover{
+            transform: scale(1.3);
+        }
+        .moth {
+            display: flex;
+        }
+        .dbox {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .dbox2{
+            color: red;
+            border-radius: 20px;
+            border: 2px solid #C1C1C1;
+            box-shadow: 3px 3px 3px 3px gray;
+
+        }
+        .dbox2:hover {
+            transform: scale(1.3);
+        }
+        #main1 {
+            background: url("../images/back1.jpg");
+            background-size: cover;
+            /* background-position: left;   */
+            width: 100vw;
+            height: 100vh; 
+        }
+        #contents1 {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main1">
+        <div id="contents1">
+            <h1 style="text-align: center; padding-bottom: 20px;">게시판 List</h1>
+            <div id="id_disp"></div>
+        </div>
+    </div>
+    <!--리스트 출력할 영역 지정-->
+    <script>
+        var v_disp = document.querySelector("#id_disp");
+        var v_dataArr = JSON.parse(localStorage.getItem(v_tblName));
+
+        /*  
+            페이지를 나누려면 이런것들이 필요함
+            페이지당 글 개수?
+            페이지번호 ? 
+            전체 글 개수 ?   
+        */
+        var v_pDsu = 10;    // 페이지당 글 개수(10개가 나오게 하려고)
+        var v_pNum = request.getParameter("pNum");
+        // alert(v_pNum);
+        if (!v_pNum) {
+            v_pNum = 1; // 페이지 넘버가 넘어 온 적이 없다면 기본 1페이지
+        }
+
+        var v_totalG = v_dataArr.length;  // 전체 글 개수
+        var v_pGaesu = Math.ceil(v_totalG / v_pDsu); // 나머지가 있으면 1페이지 더
+        // 페이지별 글 시작넘버, 끝넘버가 필요
+        // 1페이지는 0~9 인덱스, 2페이지는 10~19 인덱스...
+        var v_sNum = (v_pNum - 1) * v_pDsu;
+        var v_eNum = v_sNum + (v_pDsu - 1);
+
+        // 마지막 페이지는 글 갯수가 모자랄 수 있음, 포인트
+        if (v_eNum > (v_totalG - 1)) {
+            v_eNum = v_totalG - 1; // 강제로 마지막 index 값으로 세팅
+        }
+
+        var v_tblStr = "<table id=fantasyTable class=display responsive no-wrap order-column text-center width=100%>";
+        v_tblStr += "<tr><th scope=col>순번</th><th scope=col>제목</th><th scope=col>글쓴이</th>";
+        v_tblStr += "<th scope=col>카테고리</th><th scope=col>레벨</th><th scope=col>삭제</th></tr>";
+        for (var i = v_sNum; i <= v_eNum; i++) {
+            var v_ggul = v_dataArr[i];
+            console.log("i=", i, " v_ggul=", v_ggul); // 눈으로 항상 확인
+            v_tblStr += "<tr onmouseover='f_over(this)' onmouseout='f_out(this)' >";
+            v_tblStr += "<td>" + (i + 1) + "</td>";
+            v_tblStr += "<td><a href=boardread.html?gnum=" + v_ggul.pid + " >" + v_ggul.title + "</a></td>";
+            v_tblStr += "<td>" + v_ggul.writer + "</td>";
+            v_tblStr += "<td>" + v_ggul.cats + "</td>";
+            v_tblStr += "<td>" + v_ggul.level + "</td>";
+            v_tblStr += "<td><input type=checkbox name=nm_del value=" + v_ggul.pid + "></td>";
+            v_tblStr += "</tr>";
+        }
+        v_tblStr += "</table><br><br>";
+        v_tblStr += "<div class=pagi>";
+
+        // 페이지 넘버 화면에 출력해 보기
+        // 뜬금없는 문제 11페이지 안 나오는 이유를 찾으시오
+        // 11페이지 글은 10개가 안됨
+        for (var i = 1; i <= v_pGaesu; i++) {
+            if (i == v_pNum) {
+                v_tblStr += "<a class=active href='boardlist.html?pNum=" + i + "' >" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;";   // &nbsp 공백 까먹지 말자!!
+            } else {
+                v_tblStr += "<a class=active href='boardlist.html?pNum=" + i + "' >" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;";   // &nbsp 공백 까먹지 말자!!
+            }
+        }
+        v_tblStr += "</div>";
+        v_tblStr += "<hr><div class=moth><a class=ano href=boardwrite.html>새글 작성</a></div><br>";
+        v_tblStr += "<hr><div class=moth><a class=ano href=index.html>뒤로 가기</a></div><br>";
+        // 버튼에 기능 구현을 해봅니다. (여러개 삭제)
+        // 배열에서 삭제는 splice(인덱스,갯수)메소드를 사용합니다
+        // <button id_del type="button" class="btn btn-danger">Danger</button>
+        v_tblStr += "<div class=dbox btn><input id=id_del class=dbox2 type=button value='선택된 것만 삭제하기' onclick=del1()></div>";
+        v_disp.innerHTML = v_tblStr;
+        // 순서 (Sequence)에 의해 프로그램이 굉장히 영향을 많이 받는다!!
+
+        var v_delBtn = document.querySelector("#id_del");
+        var v_delBoxs = document.querySelectorAll("input[name=nm_del]");
+
+        function f_del() {
+            // 체크된 체크박스의 value값 가져오기
+            var v_checkedVals = []; // 빈 배열
+            for (var i = 0; i < v_delBoxs.length; i++) {
+                if (v_delBoxs[i].checked) {
+                    v_checkedVals.push(v_delBoxs[i].value);
+                }
+            }
+            // alert(v_checkedVals); // 결과 눈으로 확인!
+            // 해당하는 값 배열에서 지우기
+            for (var i = 0; i < v_checkedVals.length; i++) {
+                for (var j = 0; j < v_dataArr.length; j++) {
+                    if (v_dataArr[j].pid == v_checkedVals[i]) {
+                        v_dataArr.splice(j, 1); // 1개 지우기
+                        break;
+                    }
+                }
+            }
+            console.log(v_dataArr); // 눈으로 확인
+            // v_dataArr는 메모리상의 변수라서, 실제 localStorage에서는
+            // 안지워져 있으므로, localStorage에 덮어쓰기로 저장
+            localStorage.setItem(v_tblName, JSON.stringify(v_dataArr));
+
+            // 화면이 안 고쳐져 있어서, 화면을 새로 불러와야 함(아님 새로 만들던가)
+            location.replace("boardlist.html?pNum=" + v_pNum); // 다시 불러오기
+
+        }
+        v_delBtn.addEventListener("click", f_del);
+
+        function del1(){
+            swal("성공", "글이 삭제되었습니다", "success");
+        }
+        function f_over(p_this) {
+            p_this.style.backgroundColor = "black";
+            p_this.style.color = "pink";
+        }
+
+        function f_out(p_this) {
+            p_this.style.backgroundColor = "pink";
+            p_this.style.color = "black";
+        }
+
+        //여기서 뜬끔없는 잠깨는 문제? 제한시간 60초
+        //마우스 올라간 TR만 배경색이 블랙 글자색이 핑크로 되도록 하시옹, 얼렁
+        //mouseover, mouseout 힌토를 넘 마니 줌, 힌토 주지 마삼
+        var v_trs = document.querySelectorAll("tr");
+
+        //tr 1개 이벤트 등록 함수
+        function f_overOut(p_tr) {
+            p_tr.addEventListener("mouseover", function () {
+                p_tr.style.backgroundColor = "black";
+                p_tr.style.color = "pink";
+            });
+            p_tr.addEventListener("mouseout", function () {
+                p_tr.style.backgroundColor = "white";
+                p_tr.style.color = "black";
+            });
+        }
+       
+    </script>
+</body>
+
+</html>

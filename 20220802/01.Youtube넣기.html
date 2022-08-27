@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1>유튜브 넣어요</h1>
+    <input type="button" value="따온 영상" onclick="f_next()"><br>
+    선택하시오<br>
+    지코1<input type="radio" name="HYNN" value="0" onclick="f_sel(0)">
+    지코2<input type="radio" name="HYNN" value="1" onclick="f_sel(1)">
+    유소나3<input type="radio" name="HYNN" value="2" onclick="f_sel(2)">
+
+    <select id="id_sel" onchange="f_sel2()">
+        <option value="-1" selected>원하는 영상 선택</option>
+        <option value="0">지코1</option>
+        <option value="1">지코2</option>
+        <option value="2">유소나3</option>
+    </select>
+<script>
+    function f_sel2(){
+        if(v_select.value == -1){
+            alert("선택하세요");
+            return; // 함수 종료
+        }
+        // alert(v_select.value); // multiple 아닌 경우는 아주 간단
+        v_iframe.src = v_preUrl + v_mvList[v_select.value] + v_postUrl;
+    }
+
+
+    var v_mvList = ["-_p-3Gt2LgU", "jv9J4KDf1zM","s_EIzW9Q6Eo"];
+    var v_preUrl = "https://www.youtube.com/embed/";
+    var v_postUrl = "?autoplay=1&mute=1";
+    var v_index = 0;
+    function f_next(){
+        // iframe 내부 접근 테스트
+        var v_ifrmDoc = v_iframe.contentDocument;
+        console.log("ck1: " , v_iframe);
+
+        // 메세지에 주목
+        console.log("ck2: " , v_iframe.contentWindow.document);
+        v_ifrmDoc.querySelector("#player").innerHTML = "<h1>너 플레이년</h1>";
+
+        // iframe의 src 속성에 직접 값을 주기
+        v_iframe.src = v_preUrl + v_mvList[++v_index] + v_postUrl;
+        if(v_index == v_mvList.length-1){
+            v_index =-1;
+        }
+    }
+    
+    var v_iframe; // 전역변수로 설정
+    var v_select;
+    // 페이지 로딩 후 초기화가 필요하다면 window.onload에
+    window.onload = function(){   // 페이지 로딩이 끝나면 자동으로 실행 
+        v_iframe = document.querySelector("#geniousDayoung");
+        v_select = document.querySelector("#id_sel");
+    }
+    function f_sel(p_index){
+        v_iframe.src = v_preUrl + v_mvList[p_index] + v_postUrl;
+    }
+</script>
+    <iframe id="geniousDayoung" width="781" height="439" 
+    src="https://www.youtube.com/embed/4qtTZAcaVlQ?autoplay=1&mute=1"
+    title="[MV] HYNN(박혜원) _ The Lonely Bloom Stands Alone(시든 꽃에 물을 주듯)" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+    </iframe>
+   
+    
+</body>
+</html>

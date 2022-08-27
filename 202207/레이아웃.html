@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        /* 레이아웃 잡을 땐 항상 border 속성을 활용한다, 눈에 보여야 생각이 이어짐 */
+        div {
+            display: inline-block;
+            /* div는 default가 block이라 옆에 아무도 못옴 */
+            width: 200px;
+            height: 300px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div id="container" style="width:500px;">
+        <div class="kjw">로제</div>
+        <div class="kjw">제니</div>
+        <div class="kjw">지수</div>
+        <div class="kjw">리사</div>
+    </div> -->
+    <input type="text" name="" id="" placeholder="input : text">
+    <br>
+    <input type="checkbox"> 짜장면
+    <input type="checkbox"> 짬뽕
+    <br>
+    <input type="radio" name="gender" checked> 남자
+    <input type="radio" name="gender"> 여자
+    <br>
+    <input type="password" placeholder="input:passwoard"> 비밀번호
+    <br>
+    <input type="button" value="input:button">
+    <br>
+    <input type="file">
+    <br>
+    <input type="email" placeholder="input:email">
+    과일
+    <ol>
+        <li>사과</li>
+        <li>포도</li>
+        <li>오렌지</li>
+    </ol>
+    과일
+    <ul>
+        <li>사과</li>
+        <li>포도</li>
+        <li>오렌지</li>
+    </ul>
+    <form>First name: <input type="text" name="firstname" /><br />Last name: <input type="text" name="lastname" />
+    </form>
+    <form>Password: <input type="password" name="pwd" /></form>
+    <form><input type="radio" name="sex" value="male" /> Male<br /><input type="radio" name="sex" value="female" />
+        Female</form>
+    <form><input type="checkbox" name="vehicle" value="Bike" /> I have a bike<br /><input type="checkbox" name="vehicle"
+            value="Car" /> I have a car </form>
+    <form name="input" action="html_form_action.asp" method="get">Username: <input type="text" name="user" /><input
+            type="submit" value="Submit" /></form>
+    <p><b><u>우tothe영tothe우:</u></b></p>
+    <img src="./images/우영우.jpg" width="200" height="150" alt="wooyoungwoo" usemap="#planetmap" />
+    <map name="planetmap">  <area shape="rect" coords="0,0,82,126" alt="Sun" href="sun.htm" /> 
+        <area shape="circle" coords="90,58,3" alt="Mercury" href="mercur.htm" /> 
+        <area shape="circle" coords="124,58,8" alt="Venus" href="venus.htm" /></map>
+    <table>
+        <tr align="center" bgcolor="skyblue">
+            <td>월</td>
+            <td>화</td>
+            <td>수</td>
+            <td>목</td>
+            <td>금</td>
+            <td>토</td>
+            <td>일</td>
+        </tr>
+        <tr align="center" bgcolor="black" style="color:white">
+            <td>운동</td>
+            <td>공부</td>
+            <td>여행</td>
+            <td>취미</td>
+            <td>아파트장</td>
+            <td colspan="2">놀기</td>
+        </tr>
+    </table>
+    <select name="job">
+        <option value="student">java master</option>
+        <option value="teacher">python master</option>
+        <option value="criminal">C++ master</option>
+    </select></br>
+</body>
+
+</html>

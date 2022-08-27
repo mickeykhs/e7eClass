@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        
+        #id_ball{
+            /* transform: skew(45deg); */
+            /*transform: rotate(10deg);  요걸 이용해서 공을 돌리자 */ 
+            position: absolute;
+            top: 50px;
+            width: 100px;
+            height: 100px;
+            background-image: url("../images/설인아2.jpg");
+            background-size: 100px 100px;
+            border-radius: 50px 50px; /* weidth height의 절반을 주면 동그라미 */
+        }
+        #id_bar {
+            position: absolute;
+            width: 300px;
+            height: 30px;
+            left: 30px;
+            bottom: 50px;
+            background-color: blueviolet;
+            border-radius: 20px 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>과제는 막대가 공을 튀겨 내기</h1>
+<h1>과제는 막대기 왼쪽 오른쪽 벽속으로 안들어가기</h1>
+<div id="id_ball"></div>
+<div id="id_bar"></div>
+<input type="button" value="start" onclick="f_move()">
+<script>
+// javascript 에서 브라우져의 탭 하나 하나를 window라는 키워드로 부름
+// javascript 는 window 안에서 돌아감, window안에 URL이 바뀌면
+// 이전껀 다(선언되었던 변수 함수등등) 없어짐
+var v_ball= document.querySelector("#id_ball");
+var v_bar = document.querySelector("#id_bar");
+var v_mvHeight=5; // 수직이동거리
+var v_mvWidth=5;  // 수평이동거리
+var v_barMvWidth = 5;
+console.log("width:",window.innerWidth);     // 사용자가 보는 화면 넓이값
+console.log("height:",window.innerHeight);    // 사용자가 보는 화면 높이값
+// 여기서 돌발 5분 과제
+var v_gakdo = 0;
+
+function f_move(){
+    if(!v_ball.style.left){     // 해당 태그내에 정의가 안되어 있다면
+        v_ball.style.left ="0px";
+        v_ball.style.top = "50px";
+    }
+    if(!v_bar.style.bottom){
+        v_bar.style.bottom= "50px";
+        v_bar.style.left = "30px";
+    }
+   
+    v_ball.style.left = parseInt(v_ball.style.left) + v_mvWidth + "px";
+    v_ball.style.top = parseInt(v_ball.style.top) + v_mvHeight + "px";
+
+    // v_bar.style.left = parseInt(v_bar.style.left) + "px";
+    // v_bar.style.bottom= parseInt(v_bar.style.bottom) + "px";
+
+    v_gakdo = v_gakdo +5;
+    v_ball.style.transform = "rotate(" + v_gakdo + "deg)";
+    
+    var v_ballLeft = parseInt(v_ball.style.left);
+    var v_ballRight = parseInt(v_ball.style.left) +100; 
+    var v_ballTop = parseInt(v_ball.style.top);
+    var v_ballBottom = parseInt(v_ball.style.top) + 100; 
+    var v_ballCenter = parseInt(v_ball.style.left) + 50;
+
+    var v_barBottom = parseInt(v_bar.style.bottom);
+    var v_barTop = parseInt(v_bar.style.bottom) + 30;
+    var v_barLeft = parseInt(v_bar.style.left);
+    var v_barRight = parseInt(v_bar.style.left) + 300;
+
+    // alert(v_ball.style.top);
+
+    // 오른쪽 충돌과 왼쪽 충돌은 별개 (곧 and가 아님 or)
+    if(v_ballRight > window.innerWidth || v_ballLeft < 0){
+        v_mvWidth = -v_mvWidth;
+    }
+    
+    /*
+    if(v_ballRight >= window.innerWidth){
+        v_mvWidth = -v_mvWidth;    // 부호 반전
+    }
+    if(v_ballLeft < 0){
+        v_mvWidth = -v_mvWidth;
+    }
+    */
+    console.log(v_ballBottom);
+    console.log(v_barTop);
+    // 상하 충돌 구현 몇초?
+    if(v_ballBottom > window.innerHeight || v_ballTop < 0){
+        v_ball.style.transform = "skew(45deg)";
+        v_mvHeight = -v_mvHeight;
+    }
+    var v_add = 1;
+    // alert(v_ballBottom);
+    // alert(window.innerHeight - v_barTop);
+    if(v_ballBottom == window.innerHeight - v_barTop + v_add &&((v_ballCenter >= v_barLeft)&&(v_ballCenter <= v_barRight))){
+        v_mvHeight = -v_mvHeight;
+    }
+    setTimeout(f_move,50);
+}
+
+window.onkeydown = function(){
+
+    var v_barLeft = parseInt(v_bar.style.left);
+    var v_barRight = parseInt(v_bar.style.left) + 300;
+    
+    if(event.keyCode == 37){ // 왼쪽 화살표
+        v_bar.style.left = parseInt(v_bar.style.left) - 10 + "px";
+        // alert(v_bar.style.bottom)
+    } 
+    if(event.keyCode == 39){ // 오른쪽 화살표
+        v_bar.style.left = parseInt(v_bar.style.left) + 10 + "px";
+    }
+    if(parseInt(v_bar.style.left) <= 0){
+        v_bar.style.left = parseInt(v_bar.style.left) +10 + "px";
+    }
+    if(parseInt(v_bar.style.left)+200 > window.innerWidth){
+        v_bar.style.left = parseInt(v_bar.style.left) -10 + "px";
+    }
+}
+
+
+// v_ball.style.left = "100px";
+</script>
+</body>
+</html>

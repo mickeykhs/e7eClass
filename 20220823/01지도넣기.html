@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 지도는 왜 넣어요? 그냥! 누군가 넣고 싶어해서
+    naver는 전에는 지원 해주었는데, 이제는 개발자 api를 받아야만 가능 -->
+    <!-- GIS-GeoGraphical Infomation System  GPS  G.. Position.. System -->
+    <!-- * 카카오맵 - 지도퍼가기 -->
+<!-- 1. 지도 노드 -->
+<div id="daumRoughmapContainer1661233086406" class="root_daum_roughmap root_daum_roughmap_landing"></div>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12854.437099123073!2d127.39221454596395!3d36.34601839776216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35654969f152f21d%3A0x594efb45e8981e14!2z64Ko7ISg6rO17JuQ!5e0!3m2!1sko!2skr!4v1661237903654!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+<script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>
+
+<!-- 3. 실행 스크립트 -->
+<script charset="UTF-8">
+	new daum.roughmap.Lander({
+		"timestamp" : "1661233086406",
+		"key" : "2bgkd",
+		"mapWidth" : "640",
+		"mapHeight" : "360"
+	}).render();
+</script>
+</body>
+</html>
