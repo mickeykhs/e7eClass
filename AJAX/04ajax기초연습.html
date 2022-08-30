@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div id="id_disp"></div>
+    <input type="button" value="XML" onclick="f_xml()">
+    <input type="button" value="JSON" onclick="f_json()">
+    <input type="button" value="TEST" onclick="f_csv()">
+    <input type="button" value="AJAX" onclick="f_ajax()">
+    <script>
+        var v_disp = document.querySelector('#id_disp');
+        function f_xml(){
+            var v_ajax = new XMLHttpRequest();
+            v_ajax.open('get','07huk.xml');
+            v_ajax.onreadystatechange = function(){
+                if(v_ajax.readyState == 4 && v_ajax.status == 200){
+                    // console.log(v_ajax.responseText); 
+                    // xml은 이렇게 받지 않아요, xml은 문자열로 받으면 다루기가 어려워요
+                    // xml문서나 html문서나 태그로 이루어진 문서인건 매한가지
+                    var v_xmlDoc = v_ajax.responseXML;
+                    // console.log(v_xmlDoc);
+                    f_test3(v_xmlDoc);
+                    /*
+                    var v_friends = v_xmlDoc.querySelectorAll("friend");
+                    // console.log(v_friends[0].innerHTML);
+                    var v_children = v_friends[2].children;
+                    for(var i=0; i<v_children.length; i++){
+                        console.log(v_children[i].innerHTML);
+                    }
+                    */
+                }
+            }
+            v_ajax.send();
+        }
+        function f_test3(p_doc){
+            // p_doc을 이용해서 friend를 id_disp에 table형식으로 출력해보기
+            var v_friends = p_doc.querySelectorAll("friend");
+
+            // console.log(v_children[1].innerHTML);
+            // console.log(v_children.innerHTML);
+            
+            var v_tblStr = "<table border=3>";
+            for(var i=0; i<v_friends.length; i++){
+                var v_children = v_friends[i].children;
+                v_tblStr += "<tr>";
+                v_tblStr += "<td>" + v_children[0].innerHTML + "</td>";
+                v_tblStr += "<td>" + v_children[1].innerHTML + "</td>";
+                v_tblStr += "<td>" + v_children[2].innerHTML + "</td>";
+                v_tblStr += "</tr>";
+            }
+            v_tblStr += "</table>";
+            v_disp.innerHTML = v_tblStr;
+        }
+
+
+        function f_json(){
+            var v_ajax = new XMLHttpRequest();
+            v_ajax.open('get','06merong.json');
+            v_ajax.onreadystatechange = function(){
+                if(v_ajax.readyState == 4 && v_ajax.status == 200){
+                    v_arr = JSON.parse(v_ajax.responseText);
+                    f_test2(v_arr);
+                }
+            }
+            v_ajax.send();
+        }
+
+        function f_test2(p_arr){
+            // 넘어온 값을 id_disp에 table형식으로 출력하시오
+            var v_tblStr = "<table border=3>";
+            for(var i=0; i<p_arr.length; i++){
+                v_tblStr += "<tr>";
+                v_tblStr += "<td>" + p_arr[i].name + "</td>";
+                v_tblStr += "<td>" + p_arr[i].age + "</td>";
+                v_tblStr += "<td>" + p_arr[i].alias + "</td>";
+                v_tblStr += "</tr>";
+            } 
+            v_tblStr += "</table>";
+            v_disp.innerHTML = v_tblStr;
+        }
+
+
+        var f_csv = function(){
+            var v_ajax = new XMLHttpRequest();
+            v_ajax.open('get','05test.csv');
+            v_ajax.onreadystatechange=function(){
+                if(v_ajax.readyState == 4 && v_ajax.status == 200){
+                    f_test(v_ajax.responseText);
+                }
+            }
+            v_ajax.send();
+        }
+
+        function f_test(p_arg){
+            // 여기서 문제. 넘어온 값을 id_disp에 table형식으로
+            // 출력하시오
+            var i= 1;
+            var v_lines = p_arg.split("\n"); // split 하면 무조건 배열
+            console.log(v_lines);
+            var v_cc = v_lines[i].split[","];
+            console.log(v_cc);
+
+            /* innerHTML을 사용하면 바로 닫아버린다 따라서 변수를줘서 한번만 innerHTML에
+               담는것이 좋다 */
+
+               /*   안좋은 예
+            v_disp.innerHTML += "<table border=1><tr>";
+            for(var i=0; i<=v_lines.length; i++){
+                // alert(v_lines[i]);  // 한줄 내용
+                v_disp.innerHTML += "<td>" + v_lines[i].split(",") + "</td>"; 
+            }
+            */
+
+            v_disp.innerHTML +="</tr></table>";
+            var v_tblStr = "<table border = 3>";
+                for(var i=0; i<v_lines.length; i++){
+                    var v_tds = v_lines[i].split(",");
+                    v_tblStr += "<tr>";
+                    v_tblStr += "<td>" + v_tds[0] + "</td>";
+                    v_tblStr += "<td>" + v_tds[1] + "</td>";
+                    v_tblStr += "<td>" + v_tds[2] + "</td>";
+                    v_tblStr += "<tr>";
+                }
+            v_tblStr += "</table>";
+            v_disp.innerHTML = v_tblStr;
+
+        }
+
+        var v_myRo;
+        function f_ajax(){
+            var v_ajax = new XMLHttpRequest();
+            v_ajax.open('get','03dummy.txt',true);
+            v_ajax.onreadystatechange = function(){
+                if(v_ajax.readyState == 4 && v_ajax.status == 200){
+                    v_disp.innerHTML += "<h1>" + v_ajax.responseText + "</h1>";
+                    // alert('동기가 먼저인가');
+                    v_myRo = v_ajax.responseText;
+                }
+            }
+            v_ajax.send();
+
+            // Question
+            // alert('비동기가 먼저인가');
+            alert(v_myRo); // undefined
+
+        }
+    </script>
+</body>
+</html>
