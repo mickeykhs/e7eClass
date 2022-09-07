@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <input type="button" value="승돌" onclick="f_click('승돌')">
+    <input type="button" value="허똑똑" id="jh">
+    <script>
+        /*  보통 개발자가 생각할 수 있는 방법
+        function myLog(p_arg){
+            document.write(p_arg + "<br>");
+        } 
+        */
+       
+       /* 
+       e7e 개발자가 생각할 수 있는 방법 문법 오류 없음 
+       myLog = document.write;
+       */
+       
+       /*  닳고 닳아서 더 이상 호기심이 없는 개발자가 생각하는 방법
+
+       */
+        myLog = document.write.bind(document); 
+
+        myLog("<h1>고라니....산에출몰</h1>");
+        myLog("<h1>지...tothe ....</h1>");
+      
+        function f_click(p_arg){
+            console.log('응애응애응애응애응애응애응애응애응애: ', this);
+            alert('넘어온 값: ' + p_arg);
+        }
+        var v_jhBtn = document.querySelector('#jh');
+        // v_jhBtn.onclick = f_click.call({"name" : "난안하용"},"허허"); 
+        // ()를 못 붙이니 매개변수를 넘길 수가 없음
+        // 이 때 사용하는게 bind
+        // bind는 내부적으로 매개변수값을 가진 함수를 만들고
+        // 그 함수의 포인터값(보통 함수이름이라 하지요)만 리턴해줌
+
+        //!!!!!!! 괄호를 못 붙이는데 매개변수를 넘겨야할 때 bind를 쓰자!!!!!!!!!
+        
+
+        v_jhBtn.onclick = f_click.bind({"name" : "난안하용"},"허허");
+        // 차트: json구조, update, call, apply, bind(꼭!!)
+    </script>
+</body>
+</html>

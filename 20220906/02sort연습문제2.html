@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <table border="2">
+        <tbody id="t_body">
+            <tr>
+                <th onclick="f_sortTitle()">제목</th>
+                <th onclick="f_sortWriter()">지은이</th>
+                <th onclick="f_sortContent()">내용</th>
+                <th onclick="f_sortDate()">날짜</th>
+            </tr>
+            <tr>
+                <td>하용만만세</td>
+                <td>하용</td>
+                <td>할거야 안할거야</td>
+                <td>2022-09-22</td>
+            </tr>
+            <tr>
+                <td>승훈만만세</td>
+                <td>승훈</td>
+                <td>블링크에 가입하세요</td>
+                <td>2022-06-12</td>
+            </tr>
+            <tr>
+                <td>아무나만만세</td>
+                <td>누가 무나</td>
+                <td>트와이스 나연 짱!</td>
+                <td>2021-05-02</td>
+            </tr>
+            <tr>
+                <td>로제만만세</td>
+                <td>쵸리</td>
+                <td>역시 로제가 짱!</td>
+                <td>2022-09-06</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        // var v_title = document.querySelector('#tbl:nth-child(2)');
+        // console.log(v_title);
+        var v_tbody = document.querySelector('#t_body');
+        var v_trs = document.querySelectorAll('tr');
+        console.log(v_trs);
+        var v_arrTr = [];
+        // var v_con = document.querySelector('td');
+        // console.log(v_con);
+
+        for(var i=1; i< v_trs.length; i++){
+            v_arrTr.push(v_trs[i]);
+        }
+        console.log(v_arrTr);
+
+        function f_sortTitle(){
+            v_arrTr.sort(function(a,b){
+                if(a.children[0].innerHTML > b.children[0].innerHTML){
+                    return 1;
+                } else {
+                    return -1;
+                }
+            })
+            // 정렬여부 눈으로 확인
+            for(var i=0; i<v_arrTr.length; i++){
+                console.log(v_arrTr[i]);
+                v_tbody.appendChild(v_arrTr[i]);
+                // tbody에 다시 순서대로 붙이기
+            }
+        }
+        // Hint : append나 appendChild는 이미 객체가 존재하고 있을 땐 
+        // 해당 객체를 옮겨버림
+        /* 
+        for(var i=0; i<v_arrTr.length; i++){
+            console.log('=========================');
+            console.log(v_arrTr[i].children[0].innerHTML);
+            console.log(v_arrTr[i].children[1].innerHTML);
+            console.log(v_arrTr[i].children[2].innerHTML);
+            console.log(v_arrTr[i].children[3].innerHTML);
+            console.log('=========================');
+        }
+        */
+
+    </script>
+</body>
+</html>

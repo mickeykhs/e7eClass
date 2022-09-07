@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<script src="https://unpkg.com/typeit@8.3.3/dist/index.umd.js"></script>
+<body>
+    <div id="disp">
+        <!-- <h1 id="content">아하하하하 허허허허허 호호호호호</h1> -->
+        <div class="aaa">안졸리나 로제</div>
+        <div class="aaa ccc">안졸리나 제니</div>
+        <div class="aaa">안졸리나 리사</div>
+        <div class="aaa ccc">안졸리나 다영</div>
+    </div>
+</body>
+<script>
+    // 즉각 실행 함수 형태
+    // var $; 이렇게 쓰는걸 싫어함jQuery개발자들이
+    (function(){
+        // alert('난 부르지 않아도 실행되어요');
+    
+        // new 키워드를 없애고
+        var $ = function(p_sel){
+            return new myDom(p_sel);
+        }
+
+        var myDom = function(p_sel){
+            var v_elems = document.querySelectorAll(p_sel);
+            this.length = v_elems.length;
+            for(var i=0; i<v_elems.length; i++){    // 객체 속성으로 옮겨담기
+                this[i] = v_elems[i];
+            }
+            return this;    // 이것으로 myDom 함수는 class로 쓰려는 구나! 생각이 듬
+        }
+        // 메서드를 추가하려면 아래 처럼 해야 되는 데
+        // 이것이 핵심코드 영역을 침범하게 내비두게 되는 것 처럼 보여서 아주 싫음
+        // 더구나 개발자들이 자신들이 필요한 메서드를 추가하고픈 상황에도
+        // 적절치 않아 보여 prototype을 밖으로 꺼내기로 함.
+        // myDom.prototype.메서드명 = function(){}
+
+        window.$ = $;  // 전역변수 $와 지역변수 $가 참조방식으로 연결됨
+        $.fn = myDom.prototype; // prototype속성을 fn속성으로 밖으로 꺼냄
+    })();
+
+    // 이제 즉각 실행함수 밖에서도 메서드를 추가할 수 있게 됨
+    // 보통 제공되는 거 외에 개발자가 추가하는 메서드를 jQuery플러그인이라 부름
+    $.fn.eq = function(p_index){  // eq 메서드 추가
+        return this[p_index];
+    }
+    // jQuery에서 자주 쓰는 메서드 만들어 보기
+    // 먼저 html메서드 -> innerHTML 속성을 편하게 제어해 주는 메서드
+    $.fn.html = function(p_arg){
+        if(!p_arg){ // 매개변수 값 없이 불려졌을 때, 읽기를 위함
+            // jQuery개발팀은 그냥 첫번째 선택된 것의 innerHTML을 리턴하기로 함
+            return this[0].innerHTML;
+        }
+
+        if(typeof(p_arg) == 'string'){
+            for(var i=0; i<this.length; i++){
+                this[i].innerHTML = p_arg;
+            }
+        }
+        if(typeof(p_arg) == 'function'){
+            for(var i=0; i<this.length; i++){
+                this[i].innerHTML = p_arg(i,this[i].innerHTML)
+            }
+        }
+    }
+
+    // jQuery 잘 쓰려면 css 선택자 다시 공부해 올 것
+    // var v_dom1 = new myDom('#disp');
+    var v_dom2 = $('.aaa'); // new 없이 부를 수 있음
+    v_dom2.html(function(p_inx, p_html){
+        // console.log(p_inx + ' : ' + p_html);
+        if(p_inx == 1){
+            return '난 정말 자바스크립트를 혼공자 스타일이에요';
+        }
+        return p_html; // 원래 값 그대로...
+    })
+    // v_dom2.html('난 최고의 프로그래머');
+    // console.log(v_dom2.html());    // 확인!
+
+
+
+
+    // new TypeIt("#content",{
+    //     speed:50,
+    //     waitUntilVisible: true,
+    //   })
+    //     .type("shatTheXXXX", { delay: 300 })
+    //     .move(-3)
+    //     .delete(1)
+    //     .type("F")
+    //     .move(null, { to: "END" })
+    //     .type(" shat the FUAL")
+    //     .pause(300)
+    //     .delete(2)
+    //     .type("XX God")
+    //     .move(-3)
+    //     .type("g")
+    //     .move(null, { to: "END" })
+    //     .type("s")
+    //     .pause(500)
+    //     .break({ delay: 500})
+    //     .type("siba siba")
+    //     .go();
+</script>

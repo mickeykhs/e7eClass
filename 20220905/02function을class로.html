@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<script>
+    // function f_argCheck(p_arg){
+    //     alert(p_arg);  // undefined
+    // }
+    // f_argCheck();
+
+    // 직접 배열클라스 만들어 보기
+    function MyArray(){
+        // 핵심 속성은 length
+        this.length = 0;
+        return this;  // 생략 가능하지만 생략하지 않는게 유리 !
+    }
+    // 메소드 추가 prototype방식으로
+    MyArray.prototype.push = function(p_arg){
+        this[this.length] = p_arg;
+        this.length++; // 직접 length를 컨트롤 해야함
+    }
+
+    MyArray.prototype.min = function(){
+        var v_min = this[0];
+        for(var i=1; i< this.length; i++){
+            if(v_min > this[i]){
+                v_min = this[i];
+            }
+        }
+        return v_min;
+    }
+
+    MyArray.prototype.max = function(){
+        var v_max = this[0];
+        for(var i=1; i< this.length; i++){
+            if(v_max < this[i]){
+                v_max = this[i];
+            }
+        }
+        return v_max;
+    }
+
+    MyArray.prototype.forEach = function(p_callBack){
+        for(var i=0; i<this.length; i++){
+            // 함수.call(this세팅값, 매개변수값1, 매개변수값2)
+            p_callBack.call(this, this[i], i);
+        }
+    }
+
+
+    MyArray.prototype.sort = function(p_callBack){
+        alert(typeof(p_callBack));   // 확인
+        if(!p_callBack){  // 매개변수가 넘어오지 않았다면
+            // 가장 쉬운 정렬 버블정렬, max와 min을 구하는 
+            // 알고리즘만 이해했다면 문제 없음
+            for(var i=0; i<this.length; i++){
+                for(var j=i+1; j<this.length; j++){
+                    if(this[i] < this[j]){   // 작다면 서로 자리 교체
+                        var v_temp = this[i];
+                        this[i] = this[j];
+                        this[j] = v_temp;
+
+                    }
+                }
+            }
+            // alert('매개변수로 넘어온 값이 없네요');
+            return this; // 메서드 체이닝을 위한 코드
+        }
+
+        if(typeof(p_callBack) == "function"){  // 매개변수의 타입확인
+            // alert('매개변수로 함수가 넘어왔네요 콜백함수네요');
+            for(var i=0; i<this.length; i++){
+                for(var j=i+1; j<this.length; j++){
+                    if(p_callBack(this[i], this[j]) > 0 ){   // 요 라인이 sort(callback)의 핵심라인
+                        var v_temp = this[i];
+                        this[i] = this[j];
+                        this[j] = v_temp;
+
+                    }
+                }
+            }
+            // alert('매개변수로 넘어온 값이 없네요');
+            return this; // 메서드 체이닝을 위한 코드
+        }
+    }
+
+    /*-------- 여기서부터 사용 ---------*/
+    /* CallBack 함수 헷갈리는 사람들 꼭 다시한번 정리 ** */
+    var v_arr = new MyArray();
+    
+    // v_arr.sort(function(){});
+    v_arr.push(200);
+    v_arr.push(100);
+    v_arr.push(150);
+    v_arr.push(120);
+    console.log('ck: ', v_arr.sort(function(a,b){
+        return a-b;
+    }));
+    // console.log('ck: ', v_arr.sort());
+
+    v_arr.forEach(function(p_arg,p_index){
+        //forEach가 항상 for문을 돌려주고 때문에
+        //난 개별 값 처리만 callback함수에서 처리하면 됨
+        // console.log("넘어온 값:" + p_arg, p_index, this);
+        if(p_index == 2){
+            // 여기서 this -> v_arr을 가리킴 중요!!!***
+            this[p_index] = 30*p_arg;  
+        }
+    })
+    /* 
+    alert(v_arr.min()); 
+    alert(v_arr.max()); 
+    */ 
+    // console.log(v_arr);
+</script>

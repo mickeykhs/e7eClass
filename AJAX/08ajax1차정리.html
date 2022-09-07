@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <meta charset="UTF-8">
 <script>
+    /* 네임스페이스 그저 규모가 커지면 자꾸 나누어지게 됨(나누어야 잘 알 수 있음)
+    var kor = {};
+    kor.seoul = {};
+    kor.daejeon = {};
+    kor.seoul.sh = "서울 승훈";
+    kor.daejeon.sh = "대전 승훈";
+    */
+
     // 아작스 호출 방식을 일반화 시킴
-    var $={}; // 네임스페이스용 빈 객체생성
+    var $={}; // 네임스페이스용 빈 객체생성, 자바의 PACKAGE에 해당, 구분하기 위해
+    // ex)
+    // 서울시.삼성동, 대전시.삼성동
+    // ddit.or.kr.Domin , org.apache.Domin
     $.ajax = function(p_set){
         var v_ajax = new XMLHttpRequest();
         v_ajax.open(p_set.method,p_set.url);
@@ -27,7 +38,7 @@
     $.ajax({
         method:'get',
         url:'06merong.json',
-        success: function(p_rslt){
+        success: function(p_rslt){  // 요기를 다시 한번 잘 점검해서 이해해 주길!!
             alert("다시 넘어온 값은 " + p_rslt);
         }
     });
